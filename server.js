@@ -1,51 +1,50 @@
 'use strict';
 
+//SETUP, NPM PACKAGES, & MODULES
+
 const express = require('express');
+const routes = require('./routes');
 
 const app = express();
 
 const PORT = process.env.PORT || 8080;
 
-const requestTime = (req, res, next) => {
-  req.requestTime = Date.now();
-  next();
+//GLOBAL MIDDLEWARE FUNCTIONS
+
+const numSq = (number) => {
+  return function (req, res, next) {
+    req.number = Math.sqrt(number);
+    next();
+  };
 };
 
-app.use(requestTime);
+//APPS
+
+app.use((req, res, next) => {
+  req.requestTime = Date();
+  console.log(`${req.requestTime}`);
+  next();
+});
 
 app.get('/a', (req,res) => {
-  res.status(200).send('Route A');
-  res.send(`${req.requestTime}`);
+  res.status(200).send(`Route A`);
 });
 
-app.get('/b', (req,res) => {
-  res.status(200).send('Route B');
-  res.send(`${req.requestTime}`);
+app.get('/b', numSq(4), (req,res) => {
+  res.status(200).send(`Route B , ${req.number}`);
 });
 
-app.get('/c', (req,res) => {
-  res.status(200).send('Route C');
-  res.send(`${req.requestTime}`);
-});
-
-app.get('/d', (req,res) => {
-  res.status(200).send('Route D');
-  res.send(`${req.requestTime}`);
-});
-
-// app.use((req, res, error, next) => {
-//   console.log('ERROR!!!');
-//   res.status(500);
-//   res.send('Error!');
-// });
+app.use('/', routes);
 
 app.get('/*', (req, res) => {
   res.status(404).send('Route Not Found');
 
 });
 
-app.get('/', function(req, res) {
-  throw new Error('You broke me!');
+app.use(function (err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('oh god, what have you done!');
+  next();
 });
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
