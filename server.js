@@ -1,22 +1,24 @@
 'use strict';
 
+//SETUP, NPM PACKAGES, & MODULES
+
 const express = require('express');
+const routes = require('./routes');
 
 const app = express();
 
 const PORT = process.env.PORT || 8080;
 
-const randomNumber = (req, res, next) => {
-  let num = Math.round(Math.random() * 100);
-  console.log(`${num}`);
-  next();
+//GLOBAL MIDDLEWARE FUNCTIONS
+
+const numSq = (number) => {
+  return function (req, res, next) {
+    req.number = Math.sqrt(number);
+    next();
+  };
 };
 
-const numSq = ( num, req, res, next) => {
-  let number = Math.sqrt(num);
-  return number;
-  next();
-};
+//APPS
 
 app.use((req, res, next) => {
   req.requestTime = Date();
@@ -28,25 +30,21 @@ app.get('/a', (req,res) => {
   res.status(200).send(`Route A`);
 });
 
-app.get('/b', (req,res) => {
-  res.status(200).send(`Route B`);
+app.get('/b', numSq(4), (req,res) => {
+  res.status(200).send(`Route B , ${req.number}`);
 });
 
-app.get('/c', randomNumber, (req,res) => {
-  res.status(200).send(`Route C`);
-});
-
-app.get('/d', numSq, (req,res) => {
-  res.status(200).send(`${numSq(4)}`);
-});
+app.use('/', routes);
 
 app.get('/*', (req, res) => {
   res.status(404).send('Route Not Found');
 
 });
 
-app.get('/', function(req, res) {
-  throw new Error('You broke me!');
+app.use(function (err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('oh god, what have you done!');
+  next();
 });
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
