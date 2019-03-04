@@ -16,19 +16,14 @@ Karl Polintan
 * [back-end]()
 
 ### Module
-#### `server.js`
+#### `routes.js`
 ##### Exported Values, Routes and Methods
 
-###### `requestTime() -> Date string`
-###### `Route A '/a' -> Time string`
-###### `Route B '/b' -> Time string`
 ###### `Route C '/c' -> Time string`
 ###### `Route D '/d' -> Time string`
-###### `'/*' -> 'Route Not Found'`
-###### `'/' -> 'You broke me!'`
 
 #### Tests
-* To run tests, please use the `npm run test` command.
+* No test to run.
 
 #### UML
 ![UML](uml.png)
