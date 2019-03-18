@@ -2,7 +2,8 @@
 ==============================================
 
 ## LAB 07
-[![Build Status]()]()
+
+Learning about middleware, using express.Route().
 
 #### Authors: 
 Erik Johnson<br>
@@ -11,9 +12,8 @@ Karl Polintan
 
 ### Links and Resources
 * [repo](https://github.com/erikmjohnson/lab-07-middleware)
-* [travis]()
 * [heroku](https://lab-07-middleware.herokuapp.com/)
-* [back-end]()
+
 
 ### Module
 #### `routes.js`
@@ -25,5 +25,3 @@ Karl Polintan
 #### Tests
 * No test to run.
 
-#### UML
-![UML](uml.png)
